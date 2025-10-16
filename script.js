@@ -94,10 +94,6 @@ class Button {
         // Concatenate all processes
         this.collisionActivate()
         this.draw()
-
-        if (this.isClicked) {
-            console.log("clicked")
-        }
     }
 }
 
@@ -192,7 +188,8 @@ class Calculator {
                         }
                     }
                     if (!stop) { this.memory = '' }
-                    else { this.memory = eval(this.memory) }
+                    else {try {this.memory = eval(this.memory).toString()} 
+                          catch (SyntaxError) {this.memory = this.memory}}
                     
                 }
             }
@@ -214,8 +211,6 @@ class Calculator {
         ctx.strokeStyle = 'white'
         ctx.lineWidth = 3
         ctx.strokeRect(this.x - size / 2, this.y - size * 1.5 - gap, size * 4 + gap * 3, size)
-
-        //if(this.di)
 
         let border = 15
         this.screen = this.memory.length>border ? this.memory.toString().slice(this.memory.length-border,this.memory.length):this.memory
@@ -242,10 +237,6 @@ let gap = 15
 let size = 100
 calculator = new Calculator(canvas.width/2-size*2-gap*3/2,canvas.height/2+size-size*5/2) 
 
-for(let i=0; i<10; i++){
-    console.log(i,ctx.measureText(i.toString()+' '+(i+3).toString()).width)
-}
-
 let fps = 60
 function main() {
     setTimeout(() => {
@@ -267,6 +258,8 @@ onmouseup = function (event) {
 
     mouse.isClicked = true
     mouse.isPressed = false
+
+    console.log(calculator.memory.length, calculator.screen.length)
 }
 onmousedown = function (event) {
     mouse.down.x = event.clientX - canvas.offsetLeft
